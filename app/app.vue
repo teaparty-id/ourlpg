@@ -3,7 +3,12 @@
     <NuxtRouteAnnouncer />
     <UApp>
       <UContainer>
-        <UTable :data="users" :columns="columns" :meta="meta" class="flex-1"> </UTable>
+        <div>
+          <UTable sticky :data="users" :columns="columns" :meta="meta" class="flex-1 max-h-[624px]"> </UTable>
+        </div>
+        <div class="mt-6">
+          <p class="text-xs">&copy; Para Pengabdi Coding</p>
+        </div>
       </UContainer>
     </UApp>
   </div>
@@ -18,6 +23,7 @@ type DataType = {
   id: number;
   name: string;
   stock: number;
+  isPriority: boolean;
   lastUpdated: string;
 };
 
@@ -25,6 +31,7 @@ const columns = [
   { accessorKey: "id", header: "ID" },
   { accessorKey: "name", header: "Name" },
   { accessorKey: "stock", header: "Stock" },
+  { accessorKey: "isPriority", header: "Priority" },
   { accessorKey: "lastUpdated", header: "Last Updated" },
 ];
 
@@ -50,9 +57,7 @@ const users = (await db.selectUsers()).map((data) => {
   const date = new Date(data.lastUpdated?.getTime()! * 1000);
 
   return {
-    id: data.id,
-    name: data.name,
-    stock: data.stock,
+    ...data,
     lastUpdated: formatTimeAgo(date),
   } as DataType;
 });
