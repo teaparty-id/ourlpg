@@ -3,9 +3,7 @@
     <NuxtRouteAnnouncer />
     <UApp>
       <UContainer>
-        <div>
-          <UTable sticky :data="users" :columns="columns" :meta="meta" class="flex-1 max-h-[624px]"> </UTable>
-        </div>
+        <UTable sticky :data="users" :columns="columns" :meta="meta" class="flex-1 max-h-156"> </UTable>
         <div class="mt-6">
           <p class="text-xs">&copy; Para Pengabdi Coding</p>
         </div>
@@ -17,7 +15,11 @@
 <script setup lang="ts">
 import "@dotenvx/dotenvx/config";
 import { Database } from "./utils/database";
+import { h, resolveComponent } from "vue";
 import type { TableMeta, Row } from "@tanstack/vue-table";
+import type { TableColumn } from "@nuxt/ui";
+
+const USwitch = resolveComponent("USwitch");
 
 type DataType = {
   id: number;
@@ -27,11 +29,19 @@ type DataType = {
   lastUpdated: string;
 };
 
-const columns = [
+const columns: TableColumn<DataType>[] = [
   { accessorKey: "id", header: "ID" },
   { accessorKey: "name", header: "Name" },
   { accessorKey: "stock", header: "Stock" },
-  { accessorKey: "isPriority", header: "Priority" },
+  {
+    accessorKey: "isPriority",
+    header: "Priority",
+    cell: ({ row }) => {
+      return h(USwitch, {
+        modelValue: row.original.isPriority,
+      });
+    },
+  },
   { accessorKey: "lastUpdated", header: "Last Updated" },
 ];
 
