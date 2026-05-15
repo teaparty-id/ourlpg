@@ -48,6 +48,10 @@ const columns: TableColumn<DataType>[] = [
 const meta: TableMeta<DataType> = {
   class: {
     tr: (row: Row<DataType>) => {
+      const lastUpdatedSlice = row.original.lastUpdated.split(" ");
+      if (parseInt(lastUpdatedSlice[0]!) > 5 && ["jam", "hari"].includes(lastUpdatedSlice[1]!)) {
+        return "bg-error/10";
+      }
       if (row.original.stock >= 100) {
         return "bg-error/10";
       }
